@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "KidGuard for YouTube",
   "version": "1.1.0",
-  "description": "Blocks restricted YouTube videos and searches by keyword. PIN-protected parental control with screen time limits and schedule blocking. No accounts, no data sent anywhere.",
+  "description": "PIN-protected YouTube parental control. Block videos by keyword, set daily screen time limits and schedules. No data collected.",
   "permissions": ["storage", "alarms", "tabs"],
   "host_permissions": ["https://www.youtube.com/*"],
   "icons": {
