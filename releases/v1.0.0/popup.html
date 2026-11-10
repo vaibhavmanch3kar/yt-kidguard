@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 320px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(160deg, #0f0c29, #302b63);
+      color: #fff;
+      min-height: 100px;
+    }
+
+    .header {
+      padding: 18px 20px 14px;
+      background: rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-icon { font-size: 28px; animation: hbounce 2s ease-in-out infinite; }
+    @keyframes hbounce {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-4px); }
+    }
+    .header-title { font-size: 16px; font-weight: 800; letter-spacing: 0.2px; }
+    .header-sub   { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+    #auth-section { padding: 24px 20px; display: flex; flex-direction: column; gap: 12px; }
+    .auth-label { font-size: 13px; color: rgba(255,255,255,0.6); text-align: center; }
+    .pin-wrapper { display: flex; gap: 8px; }
+    input[type="password"] {
+      flex: 1; padding: 10px 14px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08); color: #fff;
+      font-size: 18px; letter-spacing: 6px; outline: none; transition: border 0.2s;
+    }
+    input[type="password"]:focus { border-color: #0a84ff; }
+    input[type="password"]::placeholder { font-size: 13px; letter-spacing: 0; color: rgba(255,255,255,0.3); }
+    .btn-unlock {
+      padding: 10px 16px;
+      background: linear-gradient(90deg, #065fd4, #0a84ff);
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      transition: transform 0.15s; white-space: nowrap;
+    }
+    .btn-unlock:hover { transform: scale(1.04); }
+    #error { font-size: 12px; color: #ff6b6b; text-align: center; min-height: 16px; font-weight: 600; }
+
+    #main-section { display: none; flex-direction: column; }
+
+    .status-bar {
+      background: rgba(0,255,120,0.08);
+      border-bottom: 1px solid rgba(0,255,120,0.15);
+      padding: 8px 20px; font-size: 11px;
+      color: rgba(0,255,160,0.85);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #00ff88; box-shadow: 0 0 6px #00ff88; flex-shrink: 0;
+    }
+
+    .add-row { display: flex; gap: 8px; padding: 16px 20px 10px; }
+    input[type="text"] {
+      flex: 1; padding: 10px 14px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08); color: #fff;
+      font-size: 13px; outline: none; transition: border 0.2s;
+    }
+    input[type="text"]:focus { border-color: #0a84ff; }
+    input[type="text"]::placeholder { color: rgba(255,255,255,0.3); }
+    .btn-add {
+      padding: 10px 14px;
+      background: linear-gradient(90deg, #065fd4, #0a84ff);
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 13px; font-weight: 700; cursor: pointer; transition: transform 0.15s;
+    }
+    .btn-add:hover { transform: scale(1.04); }
+
+    .section-label {
+      padding: 4px 20px 8px; font-size: 10px; font-weight: 700;
+      letter-spacing: 1.2px; color: rgba(255,255,255,0.35); text-transform: uppercase;
+    }
+
+    #keyword-list { list-style: none; padding: 0 12px; margin: 0; max-height: 200px; overflow-y: auto; }
+    #keyword-list::-webkit-scrollbar { width: 4px; }
+    #keyword-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+    #keyword-list li {
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.08);
+      padding: 8px 12px; border-radius: 10px; margin-bottom: 6px;
+      font-size: 13px; transition: background 0.2s;
+    }
+    #keyword-list li:hover { background: rgba(255,255,255,0.11); }
+    .kw-badge { display: inline-flex; align-items: center; gap: 6px; }
+    .kw-dot { width: 6px; height: 6px; border-radius: 50%; background: #ff6b6b; box-shadow: 0 0 5px #ff6b6b; }
+    #keyword-list li button {
+      background: rgba(255,80,80,0.15); color: #ff6b6b; border: none;
+      border-radius: 6px; width: 26px; height: 26px; font-size: 14px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; flex-shrink: 0;
+    }
+    #keyword-list li button:hover { background: rgba(255,80,80,0.35); }
+
+    .footer { padding: 12px 20px 16px; display: flex; flex-direction: column; gap: 8px; }
+    #status { font-size: 11px; color: #00e676; text-align: center; min-height: 14px; font-weight: 600; }
+    .btn-lock {
+      padding: 10px; background: rgba(200,0,0,0.2);
+      border: 1px solid rgba(255,80,80,0.3); color: #ff6b6b;
+      border-radius: 10px; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .btn-lock:hover { background: rgba(200,0,0,0.4); }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-icon">🛡️</div>
+    <div>
+      <div class="header-title">KidGuard</div>
+      <div class="header-sub">YouTube keyword blocker</div>
+    </div>
+  </div>
+
+  <div id="auth-section">
+    <div class="auth-label">🔒 Parent access required</div>
+    <div class="pin-wrapper">
+      <input type="password" id="pin-input" placeholder="Enter PIN" maxlength="8" />
+      <button class="btn-unlock" id="unlock-btn">Unlock</button>
+    </div>
+    <div id="error"></div>
+  </div>
+
+  <div id="main-section">
+    <div class="status-bar">
+      <div class="status-dot"></div>
+      KidGuard is active and protecting
+    </div>
+    <div class="add-row">
+      <input type="text" id="new-keyword" placeholder="Add a keyword to block..." />
+      <button class="btn-add" id="add-btn">+ Add</button>
+    </div>
+    <div class="section-label">Blocked Keywords</div>
+    <ul id="keyword-list"></ul>
+    <div class="footer">
+      <div id="status"></div>
+      <button class="btn-lock" id="lock-btn">🔒 Lock Settings</button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
